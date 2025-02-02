@@ -5,11 +5,13 @@ import requests
 import datetime
 
 BASE_URL = "http://localhost:5040"  # URL for the server.
+MERCHANT_ID = "db3da37d-edef-4c99-aea0-86c297feff0f"
 
 # Send a POST request to the server.
-req = requests.post(
+http_response = requests.post(
     url=f"{BASE_URL}/accept-payment",
     data={
+        "merchant_id": MERCHANT_ID,
         "timestamp": datetime.datetime.now().isoformat(),
         "card_number": "-".join(f"{randint(0, 9999):04}" for _ in range(4)),  # Randomized card number.
         "card_security_code": f"{randint(1, 999):03}",  # Randomized security code.
@@ -26,6 +28,7 @@ req = requests.post(
 )
 
 # Get the response back as json and print it out.
-response = req.json()
-print(json.dumps(response, indent=2))
+response_body = http_response.json()
+print("HEADERS:", json.dumps(dict(http_response.headers), indent=2))
+print("BODY:", json.dumps(response_body, indent=2))
 
